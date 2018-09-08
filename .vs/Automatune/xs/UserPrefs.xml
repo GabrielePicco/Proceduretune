@@ -1,0 +1,23 @@
+﻿<Properties StartupConfiguration="{16C9ABE8-4B5A-16CA-8707-F577FA347FBB}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/GameManager.cs">
+    <Files>
+      <File FileName="Assets/Script/GameManager.cs" Line="93" Column="1" />
+      <File FileName="Assets/Script/Tile.cs" Line="32" Column="1" />
+      <File FileName="Assets/Script/Arrow.cs" Line="18" Column="6" />
+      <File FileName="Assets/Script/Panel.cs" Line="3" Column="37" />
+      <File FileName="Assets/Script/Visitor.cs" Line="26" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/gabriele/Downloads/Automatune/Assets/Script/Arrow.cs" relfile="Assets/Script/Arrow.cs" line="22" column="63" />
+      <Breakpoint file="/Users/gabriele/Downloads/Automatune/Assets/Script/Tile.cs" relfile="Assets/Script/Tile.cs" line="31" column="25" />
+      <Breakpoint file="/Users/gabriele/Downloads/Automatune/Assets/Script/Tile.cs" relfile="Assets/Script/Tile.cs" line="32" column="1" />
+      <Breakpoint file="/Users/gabriele/Downloads/Automatune/Assets/Script/Visitor.cs" relfile="Assets/Script/Visitor.cs" line="26" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
