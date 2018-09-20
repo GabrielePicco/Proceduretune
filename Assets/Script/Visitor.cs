@@ -8,6 +8,7 @@ public class Visitor : MonoBehaviour {
     private int lastActorID = -1;
     private bool move = true;
     private bool waitingStop = false;
+    private bool waitingPlay = false;
 
     void Start () 
     {
@@ -27,7 +28,29 @@ public class Visitor : MonoBehaviour {
 
     public void OnPlay()
     {
-        move = true;
+        waitingPlay = true;
+    }
+
+    public void OnCollide()
+    {
+        if (gameManager == null) return;
+        Tile tile = gameManager.GetTile(transform.position);
+        tile.OnVisitorCollide(gameObject);
+        transform.position = tile.transform.position;
+        CheckIfStopPlayNeeded();
+    }
+
+    private void CheckIfStopPlayNeeded(){
+        if (waitingStop)
+        {
+            move = false;
+            waitingStop = false;
+        }
+        if (waitingPlay)
+        {
+            move = true;
+            waitingPlay = false;
+        }
     }
 
     void OnMouseOver()
@@ -36,6 +59,20 @@ public class Visitor : MonoBehaviour {
         {
             gameManager.editVisitor(this);
         }
+    }
+
+    private void OnEnable()
+    {
+        GameManager.OnStartVisitor += OnPlay;
+        GameManager.OnStopVisitor += OnStop;
+        GameManager.OnVisitorsCollide += OnCollide;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnStartVisitor -= OnPlay;
+        GameManager.OnStopVisitor -= OnStop;
+        GameManager.OnVisitorsCollide -= OnCollide;
     }
 
     /** 
@@ -50,15 +87,6 @@ public class Visitor : MonoBehaviour {
         }
     }
 
-    public void NotifyVisit(Vector3 position)
-    {
-        if(waitingStop)
-        {
-            transform.position = position;
-            move = false;
-            waitingStop = false;
-        }
-    }
 
     public void ChangeDirection(Vector3 direction, int identifier, Vector3 precisePosition)
     {

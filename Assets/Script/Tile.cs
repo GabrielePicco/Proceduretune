@@ -28,12 +28,11 @@ public class Tile : MonoBehaviour {
     /**
      * Invert the position if needed and Play the notes on the tile
      */
-    private void OnTriggerStay2D(Collider2D collision)
+    public void OnVisitorCollide(GameObject collision)
     {
         if (collision.tag.Equals("Visitor") && Vector3.Distance(collision.transform.position, transform.position) < GameManager.COLLISION_DISTANCE)
         {
             Visitor visitor = collision.GetComponent<Visitor>();
-            visitor.NotifyVisit(transform.position);
             InvertPositionIfNeeded(visitor);
             PlayNotes();
         }

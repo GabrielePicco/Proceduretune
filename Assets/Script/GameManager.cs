@@ -9,12 +9,17 @@ public class GameManager : MonoBehaviour {
     public enum GameState { Running, Paused };
 
     public static readonly float COLLISION_DISTANCE = 0.1f;
-    public static float SPEED = 1;
+    public static float SPEED = 2.5f;
 
     public GameObject tile;
     public GameObject visitor;
     public GameObject arrow;
     public Canvas canvasModal;
+
+    [Header("Game Settings")]
+    public int tilesNumber = 7;
+    [Range(0, 30)]
+    public float spanPercentual = 15;
 
     [Header("UI")]
     public GameObject btnPrefab;
@@ -39,25 +44,28 @@ public class GameManager : MonoBehaviour {
     public GameObject btnArrowDelete;
     public GameObject btnVisitorDelete;
 
-    public int tilesNumber = 7;
-    [Range(0, 30)]
-    public float spanPercentual = 15;
+    private float collisionInterval = 1;
+    private float tileSize;
     private Tile selectedTile;
     private GameObject selectedVisitor;
+    private GameObject newVisitor = null;
+    private Vector2 cornerPosition;
+    private Tile[,] tiles;
 
-    private delegate void StopVisitorEvent();
-    private StopVisitorEvent OnStopVisitor;
-    private delegate void StartVisitorEvent();
-    private StartVisitorEvent OnStartVisitor;
-    private float collisionInterval = 1;
+    public delegate void StartVisitorEvent();
+    public static StartVisitorEvent OnStartVisitor;
+    public delegate void StopVisitorEvent();
+    public static StopVisitorEvent OnStopVisitor;
+    public delegate void VisitorsCollideEvent();
+    public static VisitorsCollideEvent OnVisitorsCollide;
+
 
     void Start () 
     {
         GenerateGrid(tilesNumber);
         this.selectedTile = GameObject.Find("Tile(Clone)").GetComponent<Tile>();
-        AddVisitor();
-        selectedVisitor.GetComponent<SpriteRenderer>().color = Color.white;
         HideAllEditor();
+        AddVisitor();
         StartCoroutine(onClockEvent());
     }
 
@@ -65,7 +73,11 @@ public class GameManager : MonoBehaviour {
     {
         while (true)
         {
-            Debug.Log("Collision");
+            if(newVisitor != null){
+                newVisitor.SetActive(true);
+                newVisitor = null;
+            }
+            if(OnVisitorsCollide != null) OnVisitorsCollide();
             yield return new WaitForSeconds(collisionInterval);
         }
     }
@@ -103,11 +115,10 @@ public class GameManager : MonoBehaviour {
     public void AddVisitor()
     {
         HideOptionMenu();
-        Vector3 initPos = selectedTile.transform.position;
-        initPos.x += 0.2f;
-        selectedVisitor = Instantiate(visitor, initPos , visitor.transform.rotation);
-        OnStopVisitor += selectedVisitor.GetComponent<Visitor>().OnStop;
-        OnStartVisitor += selectedVisitor.GetComponent<Visitor>().OnPlay;
+        Vector3 pos = selectedTile.transform.position;
+        newVisitor = Instantiate(visitor, pos, visitor.transform.rotation);
+        newVisitor.SetActive(false);
+        selectedVisitor = newVisitor;
         selectedVisitor.GetComponent<SpriteRenderer>().color = btnSelectedColor;
         this.selectedTile.GetComponent<SpriteRenderer>().color = btnNormalColor;
         ShowVisitorEditor();
@@ -222,6 +233,7 @@ public class GameManager : MonoBehaviour {
 
     private void GenerateGrid(int tileNumber)
     {
+        tiles = new Tile[tilesNumber, tilesNumber];
         float tileOriginalHeight = tile.GetComponent<SpriteRenderer>().sprite.bounds.size.y;
         float worldScreenHeight = (float)(Camera.main.orthographicSize * 2.0);
         float tileSpan = (worldScreenHeight / tileNumber) * spanPercentual / 100;
@@ -236,6 +248,7 @@ public class GameManager : MonoBehaviour {
             {
                 GameObject t = Instantiate(tile, position, tile.transform.rotation);
                 Tile tileI = t.GetComponent<Tile>();
+                tiles[i,j] = tileI;
                 if ((i == 0 && j == 0) || (i == tileNumber - 1 && j == tileNumber - 1) || (i == 0 && j == tileNumber - 1) || (j == 0 && i == tileNumber - 1)) tileI.SetTileType(TileType.Corner);
                 else if(i == 0 || i == tileNumber - 1) tileI.SetTileType(TileType.Border);
                 else if (j == 0 || j == tileNumber - 1) tileI.SetTileType(TileType.Margin);
@@ -245,7 +258,18 @@ public class GameManager : MonoBehaviour {
             }
             position.y -= tileScreenHeight + tileSpan;
         }
+        cornerPosition = new Vector2(-(worldScreenHeight / 2 - tileScreenHeight / 2 - tileSpan), worldScreenHeight / 2 - tileScreenHeight / 2 - tileSpan);
+        tileSize = tileScreenHeight + tileSpan;
         CalculateCollisionInterval(tileScreenHeight + tileSpan);
+    }
+
+    public Tile GetTile(Vector3 position)
+    {
+        position.x -= cornerPosition.x;
+        position.y -= cornerPosition.y;
+        int row = Mathf.RoundToInt(- position.y / tileSize);
+        int column = Mathf.RoundToInt(position.x / tileSize);
+        return tiles[row, column];
     }
 
     private void CalculateCollisionInterval(float spaceBetweenTile)
