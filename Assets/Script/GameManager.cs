@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,15 +9,23 @@ public class GameManager : MonoBehaviour {
     public enum GameState { Running, Paused };
 
     public static readonly float COLLISION_DISTANCE = 0.1f;
+    public static float SPEED = 1;
 
     public GameObject tile;
     public GameObject visitor;
     public GameObject arrow;
     public Canvas canvasModal;
 
+    [Header("UI")]
+    public GameObject btnPrefab;
+    public GameObject scroolDynamic;
+    public GameObject scroolOctave;
+    public GameObject scroolDynamicContent;
+    public GameObject defaultPanel;
+
     [Header("PlayStop")]
-    private Color btnNormalColor = new Color32(77, 77, 77, 255);
-    private Color btnSelectedColor = new Color32(190, 48, 48, 255);
+    public Color btnNormalColor = new Color32(77, 77, 77, 255);
+    public Color btnSelectedColor = new Color32(190, 48, 48, 255);
     public GameObject btnPlay;
     public GameObject btnPause;
     public static GameState gameState = GameState.Running;
@@ -35,6 +45,12 @@ public class GameManager : MonoBehaviour {
     private Tile selectedTile;
     private GameObject selectedVisitor;
 
+    private delegate void StopVisitorEvent();
+    private StopVisitorEvent OnStopVisitor;
+    private delegate void StartVisitorEvent();
+    private StartVisitorEvent OnStartVisitor;
+    private float collisionInterval = 1;
+
     void Start () 
     {
         GenerateGrid(tilesNumber);
@@ -42,6 +58,16 @@ public class GameManager : MonoBehaviour {
         AddVisitor();
         selectedVisitor.GetComponent<SpriteRenderer>().color = Color.white;
         HideAllEditor();
+        StartCoroutine(onClockEvent());
+    }
+
+    IEnumerator onClockEvent()
+    {
+        while (true)
+        {
+            Debug.Log("Collision");
+            yield return new WaitForSeconds(collisionInterval);
+        }
     }
 
     public void ShowOptionMenu(Tile tile){
@@ -59,9 +85,13 @@ public class GameManager : MonoBehaviour {
                 selectedVisitor.GetComponent<SpriteRenderer>().color = Color.white;
                 selectedVisitor = null;
             }
+            defaultPanel.SetActive(true);
+            scroolDynamic.SetActive(false);
+            scroolOctave.SetActive(false);
             this.selectedTile = tile;
             this.selectedTile.GetComponent<SpriteRenderer>().color = btnSelectedColor;
             HideAllEditor();
+
         }
     }
 
@@ -76,6 +106,8 @@ public class GameManager : MonoBehaviour {
         Vector3 initPos = selectedTile.transform.position;
         initPos.x += 0.2f;
         selectedVisitor = Instantiate(visitor, initPos , visitor.transform.rotation);
+        OnStopVisitor += selectedVisitor.GetComponent<Visitor>().OnStop;
+        OnStartVisitor += selectedVisitor.GetComponent<Visitor>().OnPlay;
         selectedVisitor.GetComponent<SpriteRenderer>().color = btnSelectedColor;
         this.selectedTile.GetComponent<SpriteRenderer>().color = btnNormalColor;
         ShowVisitorEditor();
@@ -95,6 +127,41 @@ public class GameManager : MonoBehaviour {
         selectedVisitor = visitor.gameObject;
         selectedVisitor.GetComponent<SpriteRenderer>().color = btnSelectedColor;
         ShowVisitorEditor();
+    }
+
+    public void ShowDinamicScroll(String folderName)
+    {
+        DirectoryInfo dir = new DirectoryInfo(@folderName);
+        FileInfo[] info = dir.GetFiles("*.mp3");
+        scroolDynamic.SetActive(true);
+        int numFiles = 0;
+        foreach (FileInfo f in info)
+        {
+            numFiles += 1;
+            GameObject btn = Instantiate(btnPrefab);
+            btn.transform.SetParent(scroolDynamicContent.transform);
+            string name = f.Name.Substring(0, f.Name.LastIndexOf('.'));
+            int index = name.LastIndexOf('.');
+            if (index < 0) index = 0;
+            else index += 1;
+            name = name.Substring(index);
+            btn.GetComponentInChildren<Text>().text = name;
+            String resourcePath = f.FullName;
+            String find = "Resources";
+            resourcePath = resourcePath.Substring(resourcePath.IndexOf(find, find.Length) + find.Length + 1);
+            btn.GetComponent<Button>().onClick.AddListener(() => AddNote(resourcePath));
+        }
+        RectTransform contentTransform = scroolDynamicContent.GetComponent<RectTransform>();
+        contentTransform.sizeDelta = new Vector2(contentTransform.sizeDelta.x, btnPrefab.GetComponent<RectTransform>().rect.height * numFiles + 5*numFiles + 5);
+    }
+
+    public void AddNote(String notePath)
+    {
+        scroolDynamic.SetActive(false);
+        canvasModal.enabled = false;
+        Note note = new Note();
+        note.clip = Resources.Load<AudioClip>(notePath.Substring(0, notePath.LastIndexOf('.')));
+        selectedTile.addNote(note);
     }
 
     public void AddArrow()
@@ -178,6 +245,12 @@ public class GameManager : MonoBehaviour {
             }
             position.y -= tileScreenHeight + tileSpan;
         }
+        CalculateCollisionInterval(tileScreenHeight + tileSpan);
+    }
+
+    private void CalculateCollisionInterval(float spaceBetweenTile)
+    {
+        collisionInterval = spaceBetweenTile / GameManager.SPEED;
     }
 
     private void setComponentScale(float scale)
@@ -191,6 +264,7 @@ public class GameManager : MonoBehaviour {
     public void StopVisitor()
     {
         if(gameState == GameState.Running){
+            OnStopVisitor();
             gameState = GameState.Paused;
             btnPlay.GetComponent<Image>().color = btnNormalColor;
             btnPause.GetComponent<Image>().color = btnSelectedColor;
@@ -202,9 +276,11 @@ public class GameManager : MonoBehaviour {
     {
         if (gameState == GameState.Paused)
         {
+            OnStartVisitor();
             gameState = GameState.Running;
             btnPlay.GetComponent<Image>().color = btnSelectedColor;
             btnPause.GetComponent<Image>().color = btnNormalColor;
         }
     }
+
 }

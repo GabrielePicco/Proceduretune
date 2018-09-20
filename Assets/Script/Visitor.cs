@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Visitor : MonoBehaviour {
 
-    private float speed = 3;
     private Vector3 direction;
     private GameManager gameManager;
     private int lastActorID = -1;
+    private bool move = true;
+    private bool waitingStop = false;
 
     void Start () 
     {
@@ -15,9 +17,17 @@ public class Visitor : MonoBehaviour {
 	
 	void Update ()
     {
-        if(GameManager.gameState == GameManager.GameState.Running){
-            transform.position += direction * speed * Time.deltaTime;
-        }
+        if(move) transform.position += direction * GameManager.SPEED * Time.deltaTime;
+    }
+
+    public void OnStop()
+    {
+        waitingStop = true;
+    }
+
+    public void OnPlay()
+    {
+        move = true;
     }
 
     void OnMouseOver()
@@ -37,6 +47,16 @@ public class Visitor : MonoBehaviour {
             transform.position = precisePosition;
             this.direction *= -1;
             lastActorID = identifier;
+        }
+    }
+
+    public void NotifyVisit(Vector3 position)
+    {
+        if(waitingStop)
+        {
+            transform.position = position;
+            move = false;
+            waitingStop = false;
         }
     }
 
