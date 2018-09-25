@@ -8,6 +8,7 @@ public class Visitor : MonoBehaviour {
     private bool move = true;
     private bool waitingStop = false;
     private bool waitingPlay = false;
+    private int velocityModifier = 0;
 
 
     void Start () 
@@ -19,7 +20,7 @@ public class Visitor : MonoBehaviour {
 
 	void Update ()
     {
-        if(move) transform.position += direction * GameManager.SPEED * Time.deltaTime;
+        if(move) transform.position += direction * GameManager.SPEED * velocityModifier * Time.deltaTime;
     }
 
 
@@ -34,6 +35,12 @@ public class Visitor : MonoBehaviour {
             this.direction *= -1;
             lastActorID = identifier;
         }
+    }
+
+
+    public void ImmediateStartVisitor()
+    {
+        velocityModifier = 1;
     }
 
 

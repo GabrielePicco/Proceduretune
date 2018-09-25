@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         {
             if (newVisitor != null)
             {
-                newVisitor.SetActive(true);
+                newVisitor.GetComponent<Visitor>().ImmediateStartVisitor();
                 newVisitor = null;
             }
             if (OnVisitorsCollide != null) OnVisitorsCollide();
@@ -146,12 +146,13 @@ public class GameManager : MonoBehaviour
         HideOptionMenu();
         Vector3 pos = selectedTile.transform.position;
         newVisitor = Instantiate(visitor, pos, visitor.transform.rotation);
-        newVisitor.SetActive(false);
         selectedVisitor = newVisitor;
+        StartCoroutine(Effect.AnimationScale(newVisitor, 0.3f));
         selectedVisitor.GetComponent<SpriteRenderer>().color = btnSelectedColor;
         this.selectedTile.GetComponent<SpriteRenderer>().color = btnNormalColor;
         ShowVisitorEditor();
     }
+
 
     public void DeleteVisitor()
     {
@@ -209,9 +210,18 @@ public class GameManager : MonoBehaviour
     public void AddArrow()
     {
         HideOptionMenu();
-        GameObject gm = Instantiate(arrow, selectedTile.transform.position, arrow.transform.rotation);
-        gm.transform.parent = selectedTile.transform;
+        StartCoroutine(AddArrowCrt());
         ShowArrowEditor();
+    }
+
+    IEnumerator AddArrowCrt()
+    {
+        selectedTile.GetComponent<Animator>().Play("Animate");
+        GameObject gm = Instantiate(arrow, selectedTile.transform.position, arrow.transform.rotation);
+        gm.SetActive(false);
+        gm.transform.parent = selectedTile.transform;
+        yield return new WaitForSeconds(0.5f);
+        gm.SetActive(true);
     }
 
     public void DeleteArrow()
@@ -262,10 +272,12 @@ public class GameManager : MonoBehaviour
             position.x += (tileSize / 7) * 2 * (idx % 3 - 1);
             position.y -= (tileSize / 7) * 2 * (Mathf.FloorToInt(idx / 3) - 1);
             GameObject noteSprite = Instantiate(note, position, note.transform.rotation);
+            StartCoroutine(Effect.AnimationSlideFromUp(noteSprite, 0.3f));
             newNote.sprite = noteSprite;
         }
         selectedTile.AddNote(newNote);
     }
+
 
     public void RemoveAllNotes()
     {
@@ -322,8 +334,10 @@ public class GameManager : MonoBehaviour
         position.y -= cornerPosition.y;
         int row = Mathf.RoundToInt(-position.y / tileSize);
         if (row >= tilesNumber) row = tilesNumber - 1;
+        if (row < 0) row = 0;
         int column = Mathf.RoundToInt(position.x / tileSize);
         if (column >= tilesNumber) column = tilesNumber - 1;
+        if (column < 0) column = 0;
         return tiles[row, column];
     }
 
