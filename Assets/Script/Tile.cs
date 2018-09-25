@@ -7,11 +7,13 @@ public class Tile : MonoBehaviour {
 
     public TileType tileType;
     private GameManager gameManager;
+
+    private List<Note> notes;
     private int row;
     private int column;
-    private List<Note> notes;
     private delegate void AttenuateIfNeeded();
     private AttenuateIfNeeded AttenuateNotesIfNeeded;
+
 
     private void Start()
     {
@@ -19,9 +21,19 @@ public class Tile : MonoBehaviour {
         notes = new List<Note>();
     }
 
+
     private void Update()
     {
         if(AttenuateNotesIfNeeded != null) AttenuateNotesIfNeeded();
+    }
+
+
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            gameManager.ShowOptionMenu(this);
+        }
     }
 
 
@@ -30,14 +42,29 @@ public class Tile : MonoBehaviour {
      */
     public void OnVisitorCollide(GameObject collision)
     {
-        if (collision.tag.Equals("Visitor") && Vector3.Distance(collision.transform.position, transform.position) < GameManager.COLLISION_DISTANCE)
+        if (collision.tag.Equals("Visitor"))
         {
             Visitor visitor = collision.GetComponent<Visitor>();
             InvertPositionIfNeeded(visitor);
+            TriggerArrowCollision(collision);
             PlayNotes();
         }
     }
 
+
+    /**
+     * Trigger the collision on the arrow, if present
+     */
+    private void TriggerArrowCollision(GameObject collision)
+    {
+        Arrow arrow = GetComponentInChildren<Arrow>();
+        if (arrow != null) arrow.OnVisitorCollision(collision);
+    }
+
+
+    /**
+     * If needed, invert the position of the visitor
+     */
     private void InvertPositionIfNeeded(Visitor visitor)
     {
 
@@ -53,6 +80,9 @@ public class Tile : MonoBehaviour {
     }
 
 
+    /**
+     * Play all the notes
+     */
     private void PlayNotes()
     {
         if (GameManager.gameState == GameManager.GameState.Paused) return;
@@ -61,22 +91,17 @@ public class Tile : MonoBehaviour {
         }
     }
 
+
     private void PlayNote(Note note)
     {
         note.audioSource.Stop();
         note.audioSource.volume = 1;
+        note.audioSource.pitch = GameManager.PITCH;
         note.audioSource.Play();
     }
 
-    void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            gameManager.ShowOptionMenu(this);
-        }
-    }
 
-    public void addNote(Note note){
+    public void AddNote(Note note){
         note.audioSource = gameObject.AddComponent<AudioSource>();
         note.audioSource.playOnAwake = false;
         note.audioSource.clip = note.clip;
@@ -84,10 +109,21 @@ public class Tile : MonoBehaviour {
         AttenuateNotesIfNeeded += note.OnAttenuateIfNeeded;
     }
 
+    public void DestroyAllNotes()
+    {
+        foreach(Note note in notes)
+        {
+            Destroy(note.sprite);
+        }
+        notes.Clear();
+    }
+
+
     public void SetTileType(TileType type)
     {
         this.tileType = type;
     }
+
 
     public void SetCoordinate(int i, int j)
     {
@@ -95,13 +131,19 @@ public class Tile : MonoBehaviour {
         this.column = j;
     }
 
+
     public int getRow()
     {
         return row;
     }
 
+
     public int getColumn()
     {
         return column;
+    }
+
+    public int getNotesCount(){
+        return notes.Count;
     }
 }

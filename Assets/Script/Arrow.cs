@@ -14,14 +14,6 @@ public class Arrow : MonoBehaviour {
         transform.Rotate(new Vector3(0, 0, -90));
 	}
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.tag.Equals("Visitor") && !isArrowWrongDirection() && Vector3.Distance(collision.transform.position, transform.position) < GameManager.COLLISION_DISTANCE)
-        {
-            Vector3 direction = getRotation() * Vector3.up;
-            collision.GetComponent<Visitor>().ChangeDirection(direction, transform.parent.gameObject.GetInstanceID(), transform.position);
-        }
-    }
 
     void OnMouseOver()
     {
@@ -30,6 +22,17 @@ public class Arrow : MonoBehaviour {
             gameManager.ShowOptionMenu(transform.parent.gameObject.GetComponent<Tile>());
         }
     }
+
+
+    public void OnVisitorCollision(GameObject collision)
+    {
+        if (collision.tag.Equals("Visitor") && !isArrowWrongDirection())
+        {
+            Vector3 direction = getRotation() * Vector3.up;
+            collision.GetComponent<Visitor>().ChangeDirection(direction, transform.parent.gameObject.GetInstanceID(), transform.position);
+        }
+    }
+
 
     public void Rotate()
     {
@@ -56,6 +59,7 @@ public class Arrow : MonoBehaviour {
         transform.rotation = to;
     }
 
+
     public bool isArrowWrongDirection()
     {
         Tile tile = GetComponentInParent<Tile>();
@@ -78,6 +82,7 @@ public class Arrow : MonoBehaviour {
         return wrong;
     }
 
+
     private Quaternion getRotation()
     {
         switch (dir)
@@ -92,6 +97,7 @@ public class Arrow : MonoBehaviour {
                 return Quaternion.Euler(0, 0, -90);
         }
     }
+
 
     public Direction getDirection(){
         return dir;

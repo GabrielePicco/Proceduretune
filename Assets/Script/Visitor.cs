@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Visitor : MonoBehaviour {
 
@@ -10,77 +9,27 @@ public class Visitor : MonoBehaviour {
     private bool waitingStop = false;
     private bool waitingPlay = false;
 
+
     void Start () 
     {
         direction = Vector3.right;
         gameManager = GameObject.Find("GM").GetComponent<GameManager>();
     }
 	
+
 	void Update ()
     {
         if(move) transform.position += direction * GameManager.SPEED * Time.deltaTime;
     }
 
-    public void OnStop()
-    {
-        waitingStop = true;
-    }
-
-    public void OnPlay()
-    {
-        waitingPlay = true;
-    }
-
-    public void OnCollide()
-    {
-        if (gameManager == null) return;
-        Tile tile = gameManager.GetTile(transform.position);
-        tile.OnVisitorCollide(gameObject);
-        transform.position = tile.transform.position;
-        CheckIfStopPlayNeeded();
-    }
-
-    private void CheckIfStopPlayNeeded(){
-        if (waitingStop)
-        {
-            move = false;
-            waitingStop = false;
-        }
-        if (waitingPlay)
-        {
-            move = true;
-            waitingPlay = false;
-        }
-    }
-
-    void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            gameManager.editVisitor(this);
-        }
-    }
-
-    private void OnEnable()
-    {
-        GameManager.OnStartVisitor += OnPlay;
-        GameManager.OnStopVisitor += OnStop;
-        GameManager.OnVisitorsCollide += OnCollide;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.OnStartVisitor -= OnPlay;
-        GameManager.OnStopVisitor -= OnStop;
-        GameManager.OnVisitorsCollide -= OnCollide;
-    }
 
     /** 
-     * Invert the direction, only if is not done by the same actor more than one time
-     */
+   * Invert the direction, only if is not done by the same actor more than one time
+   */
     public void InvertDirection(int identifier, Vector3 precisePosition)
     {
-        if(lastActorID != identifier){
+        if (lastActorID != identifier)
+        {
             transform.position = precisePosition;
             this.direction *= -1;
             lastActorID = identifier;
@@ -97,6 +46,68 @@ public class Visitor : MonoBehaviour {
             lastActorID = identifier;
         }
     }
+
+    private void CheckIfStopPlayNeeded()
+    {
+        if (waitingStop)
+        {
+            move = false;
+            waitingStop = false;
+        }
+        if (waitingPlay)
+        {
+            move = true;
+            waitingPlay = false;
+        }
+    }
+
+    #region Event
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            gameManager.editVisitor(this);
+        }
+    }
+
+
+    private void OnEnable()
+    {
+        GameManager.OnStartVisitor += OnPlay;
+        GameManager.OnStopVisitor += OnStop;
+        GameManager.OnVisitorsCollide += OnCollide;
+    }
+
+
+    private void OnDisable()
+    {
+        GameManager.OnStartVisitor -= OnPlay;
+        GameManager.OnStopVisitor -= OnStop;
+        GameManager.OnVisitorsCollide -= OnCollide;
+    }
+
+
+    public void OnStop()
+    {
+        waitingStop = true;
+    }
+
+
+    public void OnPlay()
+    {
+        waitingPlay = true;
+    }
+
+
+    public void OnCollide()
+    {
+        if (gameManager == null) return;
+        Tile tile = gameManager.GetTile(transform.position);
+        tile.OnVisitorCollide(gameObject);
+        transform.position = tile.transform.position;
+        CheckIfStopPlayNeeded();
+    }
+    #endregion
 
     public void SetDirection(Vector2 direction)
     {
