@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,9 +58,10 @@ public class GameManager : MonoBehaviour
     private float tileSize;
     private Tile selectedTile;
     private GameObject selectedVisitor;
-    private GameObject newVisitor = null;
+    private List<GameObject> newVisitors = new List<GameObject>();
     private Vector2 cornerPosition;
     private Tile[,] tiles;
+    private List<Visitor> visitors = new List<Visitor>();
 
     public delegate void StartVisitorEvent();
     public static StartVisitorEvent OnStartVisitor;
@@ -89,10 +91,12 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            if (newVisitor != null)
+            if (newVisitors.Count > 0)
             {
-                newVisitor.GetComponent<Visitor>().ImmediateStartVisitor();
-                newVisitor = null;
+                for (int i = newVisitors.Count - 1; i >= 0; i--){
+                    newVisitors[i].GetComponent<Visitor>().ImmediateStartVisitor();
+                    newVisitors.RemoveAt(i);
+                }
             }
             if (OnVisitorsCollide != null) OnVisitorsCollide();
             yield return new WaitForSeconds(collisionInterval);
@@ -103,6 +107,19 @@ public class GameManager : MonoBehaviour
     {
         SPEED = sliderVelocity.value;
         CalculateCollisionInterval(tileSize);
+    }
+
+    public void ChangeVisitorSpeed(float speed)
+    {
+        SPEED = speed;
+        sliderVelocity.value = speed;
+        CalculateCollisionInterval(tileSize);
+    }
+
+    public void ChangeNotesPitch(float pitch)
+    {
+        PITCH = pitch;
+        sliderPitch.value = pitch;
     }
 
     public void ChangeNotesPitch()
@@ -139,26 +156,93 @@ public class GameManager : MonoBehaviour
         HideVisitorEditor();
     }
 
+    public void SaveGame()
+    {
+        SaveLoad.Save(this);
+    }
+
+    public void LoadGame()
+    {
+        List<GameIstance> instances = SaveLoad.GetGameIstances();
+        canvasModal.enabled = true;
+        defaultPanel.SetActive(false);
+        ShowGameIstance(instances);
+    }
+
+    private void LoadGameInstance(GameIstance gameInstance)
+    {
+        HideOptionMenu();
+        SaveLoad.LoadIstance(this, gameInstance);
+    }
+
+    private void ShowGameIstance(List<GameIstance> gameIstances)
+    {
+        foreach (Transform child in scroolDynamicContent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        scroolDynamic.SetActive(true);
+        foreach (GameIstance gi in gameIstances)
+        {
+            GameObject btn = Instantiate(btnPrefab);
+            btn.transform.SetParent(scroolDynamicContent.transform);
+            btn.GetComponentInChildren<Text>().text = gi.name;
+            btn.GetComponent<Button>().onClick.AddListener(() => LoadGameInstance(gi));
+        }
+        RectTransform contentTransform = scroolDynamicContent.GetComponent<RectTransform>();
+        contentTransform.sizeDelta = new Vector2(contentTransform.sizeDelta.x, btnPrefab.GetComponent<RectTransform>().rect.height * gameIstances.Count + 5 * gameIstances.Count + 5);
+    }
+
+
     #region Visitors
+
+    public void AddVisitor(int row, int column, Vector3 direction)
+    {
+        selectedTile = GetTile(row, column);
+        AddVisitor(direction);
+    }
 
     public void AddVisitor()
     {
+        AddVisitor(Vector3.right);
+    }
+
+        public void AddVisitor(Vector3 direction)
+    {
         HideOptionMenu();
         Vector3 pos = selectedTile.transform.position;
-        newVisitor = Instantiate(visitor, pos, visitor.transform.rotation);
-        selectedVisitor = newVisitor;
-        StartCoroutine(Effect.AnimationScale(newVisitor, 0.3f));
+        selectedVisitor = Instantiate(visitor, pos, visitor.transform.rotation);
+        selectedVisitor.GetComponent<Visitor>().ChangeDirection(direction, 0, selectedTile.transform.position);
+        StartCoroutine(Effect.AnimationScale(selectedVisitor, 0.3f));
         selectedVisitor.GetComponent<SpriteRenderer>().color = btnSelectedColor;
         this.selectedTile.GetComponent<SpriteRenderer>().color = btnNormalColor;
         ShowVisitorEditor();
+        visitors.Add(selectedVisitor.GetComponent<Visitor>());
+        newVisitors.Add(selectedVisitor);
     }
 
 
     public void DeleteVisitor()
     {
         HideAllEditor();
+        visitors.Remove(selectedVisitor.GetComponent<Visitor>());
         Destroy(selectedVisitor);
         selectedVisitor = null;
+    }
+
+
+    public void DeleteAllVisitors()
+    {
+        for (int i = visitors.Count - 1; i >= 0; i--)
+        {
+            Destroy(visitors[i].gameObject);
+            visitors.RemoveAt(i);
+        }
+    }
+
+    public List<Visitor> GetVisitors()
+    {
+        return visitors;
     }
 
     public void editVisitor(Visitor visitor)
@@ -209,15 +293,27 @@ public class GameManager : MonoBehaviour
 
     public void AddArrow()
     {
+        AddArrow(Arrow.Direction.Rigth);
+    }
+
+    public void AddArrow(int row, int column, Arrow.Direction direction)
+    {
+        selectedTile = GetTile(row, column);
+        AddArrow(direction);
+    }
+
+    public void AddArrow(Arrow.Direction direction)
+    {
         HideOptionMenu();
-        StartCoroutine(AddArrowCrt());
+        StartCoroutine(AddArrowCrt(direction));
         ShowArrowEditor();
     }
 
-    IEnumerator AddArrowCrt()
+    IEnumerator AddArrowCrt(Arrow.Direction direction)
     {
         selectedTile.GetComponent<Animator>().Play("Animate");
         GameObject gm = Instantiate(arrow, selectedTile.transform.position, arrow.transform.rotation);
+        gm.GetComponent<Arrow>().setDirection(direction);
         gm.SetActive(false);
         gm.transform.parent = selectedTile.transform;
         yield return new WaitForSeconds(0.5f);
@@ -259,11 +355,19 @@ public class GameManager : MonoBehaviour
 
     #region Note
 
+
+    public void AddNote(int row, int column, String notePath)
+    {
+        selectedTile = GetTile(row, column);
+        AddNote(notePath);
+    }
+
     public void AddNote(String notePath)
     {
         scroolDynamic.SetActive(false);
         canvasModal.enabled = false;
         Note newNote = new Note();
+        newNote.notePath = notePath;
         newNote.clip = Resources.Load<AudioClip>(notePath.Substring(0, notePath.LastIndexOf('.')));
         int idx = selectedTile.getNotesCount();
         if (idx < 9)
@@ -292,7 +396,7 @@ public class GameManager : MonoBehaviour
     /**
      * Dynamically generate the grid
      */
-    private void GenerateGrid(int tileNumber)
+    public void GenerateGrid(int tileNumber)
     {
         tiles = new Tile[tilesNumber, tilesNumber];
         float tileOriginalHeight = tile.GetComponent<SpriteRenderer>().sprite.bounds.size.y;
@@ -325,6 +429,17 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void DestroyGrid()
+    {
+        for (int i = 0; i < tilesNumber; i++)
+        {
+            for (int j = 0; j < tilesNumber; j++)
+            {
+                Destroy(tiles[i, j].gameObject);
+            }
+        }
+    }
+
     /**
      * Return the Tile in the specified position
      */
@@ -341,8 +456,14 @@ public class GameManager : MonoBehaviour
         return tiles[row, column];
     }
 
+
+    public Tile GetTile(int row, int column)
+    {
+        return tiles[row, column];
+    }
+
     #endregion
-   
+
     #region GUI Management
 
     public void ShowOptionMenu(Tile tile)

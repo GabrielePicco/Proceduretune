@@ -2,7 +2,7 @@
 
 public class Visitor : MonoBehaviour {
 
-    private Vector3 direction;
+    private Vector3 direction = Vector3.right;
     private GameManager gameManager;
     private int lastActorID = -1;
     private bool move = true;
@@ -13,7 +13,6 @@ public class Visitor : MonoBehaviour {
 
     void Start () 
     {
-        direction = Vector3.right;
         gameManager = GameObject.Find("GM").GetComponent<GameManager>();
     }
 	

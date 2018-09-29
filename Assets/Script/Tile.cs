@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour {
     public TileType tileType;
     private GameManager gameManager;
 
-    private List<Note> notes;
+    private List<Note> notes = new List<Note>();
     private int row;
     private int column;
     private delegate void AttenuateIfNeeded();
@@ -18,7 +18,6 @@ public class Tile : MonoBehaviour {
     private void Start()
     {
         gameManager = GameObject.Find("GM").GetComponent<GameManager>();
-        notes = new List<Note>();
     }
 
 
@@ -72,7 +71,7 @@ public class Tile : MonoBehaviour {
         if (arrow == null || (arrow != null && arrow.isArrowWrongDirection()))
         {
             if ((tileType == TileType.Corner) || (tileType == TileType.Border && (visitor.GetDirection() == Vector3.up || visitor.GetDirection() == Vector3.down))
-                || (tileType == TileType.Margin && (visitor.GetDirection() == Vector3.right || visitor.GetDirection() == Vector3.left)))
+                || (tileType == TileType.Margin && ((visitor.GetDirection() == Vector3.right && getColumn() == gameManager.tilesNumber-1) || (visitor.GetDirection() == Vector3.left && getColumn() == 0))))
             {
                 visitor.InvertDirection(gameObject.GetInstanceID(), transform.position);
             }
@@ -141,6 +140,16 @@ public class Tile : MonoBehaviour {
     public int getColumn()
     {
         return column;
+    }
+
+    public Arrow getArrow()
+    {
+        return GetComponentInChildren<Arrow>();
+    }
+
+    public List<Note> getNotes()
+    {
+        return notes;
     }
 
     public int getNotesCount(){

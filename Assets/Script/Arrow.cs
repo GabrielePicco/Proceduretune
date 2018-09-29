@@ -102,4 +102,47 @@ public class Arrow : MonoBehaviour {
     public Direction getDirection(){
         return dir;
     }
+
+    public void setDirection(Direction direction){
+        while(direction != dir){
+            Rotate();
+        }
+    }
+
+
+    public static Vector3 ResolveDirection(Direction dir)
+    {
+        Quaternion rotation;
+        switch (dir)
+        {
+            case Direction.Up:
+                rotation = Quaternion.Euler(0, 0, 0);
+                break;
+            case Direction.Down:
+                rotation = Quaternion.Euler(0, 0, -180);
+                break;
+            case Direction.Left:
+                rotation = Quaternion.Euler(0, 0, 90);
+                break;
+            default:
+                rotation = Quaternion.Euler(0, 0, -90);
+                break;
+        }
+        return rotation * Vector3.up;
+    }
+
+    public static Direction ResolveDirection(Vector3 dir)
+    {
+        if (dir == Vector3.up){
+            return Direction.Up;
+        }else if (dir == Vector3.down)
+        {
+            return Direction.Down;
+        }else if (dir == Vector3.left)
+        {
+            return Direction.Left;
+        }else{
+            return Direction.Rigth;
+        }
+    }
 }

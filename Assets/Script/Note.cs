@@ -5,7 +5,7 @@ public class Note
     public AudioClip clip;
     public AudioSource audioSource;
     public GameObject sprite;
-
+    public string notePath;
     [SerializeField]
     private readonly float speedOfSoundAttenuation = 1.0f;
 
