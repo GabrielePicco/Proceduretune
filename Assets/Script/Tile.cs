@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour {
 
     private void Update()
     {
-        if(AttenuateNotesIfNeeded != null) AttenuateNotesIfNeeded();
+        //if(AttenuateNotesIfNeeded != null) AttenuateNotesIfNeeded();
     }
 
 

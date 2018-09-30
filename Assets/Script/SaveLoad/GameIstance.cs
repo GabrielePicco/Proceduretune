@@ -49,16 +49,14 @@ public class GameIstance
             {
                 if(tiles[i, j].arrowDirection != -1){
                     int direction = tiles[i, j].arrowDirection;
-                    if (direction == 1) direction = 3;
-                    else if (direction == 3) direction = 1;
                     gameManager.AddArrow(i, j, (Arrow.Direction)direction);
+                }
+                foreach (string note in tiles[i, j].notes){
+                    gameManager.AddNote(i, j, note);
                 }
                 if (tiles[i, j].visitorDirection != -1)
                 {
                     gameManager.AddVisitor(i, j, Arrow.ResolveDirection((Arrow.Direction)tiles[i, j].visitorDirection));
-                }
-                foreach (string note in tiles[i, j].notes){
-                    gameManager.AddNote(i, j, note);
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /**
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     public static float SPEED = 3f;
     public static float PITCH = 1f;
+    public static int TILES_NUMBER = -1;
 
     [Header("Game Settings")]
     public int tilesNumber = 7;
@@ -34,8 +36,11 @@ public class GameManager : MonoBehaviour
     public GameObject scroolDynamicContent;
     public GameObject defaultPanel;
     public Canvas canvasModal;
+    public Canvas canvasNewGame;
     public Slider sliderVelocity;
     public Slider sliderPitch;
+    public Slider sliderTilesNumbers;
+    public Text txtTilesNumber;
 
     [Header("PlayStopMenu")]
     public Color btnNormalColor = new Color32(77, 77, 77, 255);
@@ -70,6 +75,10 @@ public class GameManager : MonoBehaviour
     public delegate void VisitorsCollideEvent();
     public static VisitorsCollideEvent OnVisitorsCollide;
 
+    private void Awake()
+    {
+        if (TILES_NUMBER != -1) tilesNumber = TILES_NUMBER;
+    }
 
     /**
      * Genereate the game grid, add a visitor and start the clock
@@ -156,6 +165,12 @@ public class GameManager : MonoBehaviour
         HideVisitorEditor();
     }
 
+    public void NewGame()
+    {
+        TILES_NUMBER = (int)sliderTilesNumbers.value;
+        SceneManager.LoadScene("Main");
+    }
+
     public void SaveGame()
     {
         SaveLoad.Save(this);
@@ -207,10 +222,11 @@ public class GameManager : MonoBehaviour
         AddVisitor(Vector3.right);
     }
 
-        public void AddVisitor(Vector3 direction)
+    public void AddVisitor(Vector3 direction)
     {
         HideOptionMenu();
         Vector3 pos = selectedTile.transform.position;
+        if(selectedVisitor != null)selectedVisitor.GetComponent<SpriteRenderer>().color = Color.white;
         selectedVisitor = Instantiate(visitor, pos, visitor.transform.rotation);
         selectedVisitor.GetComponent<Visitor>().ChangeDirection(direction, 0, selectedTile.transform.position);
         StartCoroutine(Effect.AnimationScale(selectedVisitor, 0.3f));
@@ -468,7 +484,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowOptionMenu(Tile tile)
     {
-        if (canvasModal.enabled == false)
+        if (canvasModal.enabled == false && canvasNewGame.enabled == false)
         {
             canvasModal.enabled = true;
             if (tile.GetComponentInChildren<Arrow>() != null)
@@ -503,6 +519,18 @@ public class GameManager : MonoBehaviour
         canvasModal.enabled = false;
     }
 
+
+    public void ChangeTilesNumber()
+    {
+        txtTilesNumber.text = "Size: " + (int)sliderTilesNumbers.value + " x " + (int)sliderTilesNumbers.value;
+    }
+
+    public void ShowNewGameCanvas()
+    {
+        canvasNewGame.enabled = true;
+    }
+
+
     public void ShowDinamicScroll(String folderName)
     {
         DirectoryInfo dir = new DirectoryInfo(@folderName);
@@ -511,25 +539,41 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
         scroolDynamic.SetActive(true);
-        int numFiles = 0;
-        foreach (FileInfo f in info)
+        FileInfo[] notes = ReorderNotes(info);
+        foreach (FileInfo f in notes)
         {
-            numFiles += 1;
+            String noteName = getFileShortName(f.Name);
             GameObject btn = Instantiate(btnPrefab);
             btn.transform.SetParent(scroolDynamicContent.transform);
-            string name = f.Name.Substring(0, f.Name.LastIndexOf('.'));
-            int index = name.LastIndexOf('.');
-            if (index < 0) index = 0;
-            else index += 1;
-            name = name.Substring(index);
-            btn.GetComponentInChildren<Text>().text = name;
+            btn.GetComponentInChildren<Text>().text = noteName;
             String resourcePath = f.FullName;
             String find = "Resources";
             resourcePath = resourcePath.Substring(resourcePath.IndexOf(find, find.Length) + find.Length + 1);
             btn.GetComponent<Button>().onClick.AddListener(() => AddNote(resourcePath));
         }
         RectTransform contentTransform = scroolDynamicContent.GetComponent<RectTransform>();
-        contentTransform.sizeDelta = new Vector2(contentTransform.sizeDelta.x, btnPrefab.GetComponent<RectTransform>().rect.height * numFiles + 5 * numFiles + 5);
+        contentTransform.sizeDelta = new Vector2(contentTransform.sizeDelta.x, btnPrefab.GetComponent<RectTransform>().rect.height * notes.Length + 5 * notes.Length + 5);
+    }
+
+
+    private FileInfo[] ReorderNotes(FileInfo[] notes)
+    {
+        int[] substitution = new int[] { 3, 4, 1, 2, 12, 0, 10, 11, 8, 9, 7, 5, 6};
+        if (substitution.Length != notes.Length) return notes;
+        FileInfo[] result = new FileInfo[substitution.Length];
+        for (int i = 0; i < substitution.Length; i++){
+            result[substitution[i]] = notes[i];
+        }
+        return result;
+    }
+
+    static string getFileShortName(string name)
+    {
+        name = name.Substring(0, name.LastIndexOf('.'));
+        int index = name.LastIndexOf('.');
+        if (index < 0) index = 0;
+        else index += 1;
+        return name.Substring(index);
     }
 
     #endregion

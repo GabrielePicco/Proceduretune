@@ -1,22 +1,22 @@
 ﻿<Properties StartupConfiguration="{16C9ABE8-4B5A-16CA-8707-F577FA347FBB}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Tile.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Visitor.cs">
     <Files>
-      <File FileName="Assets/Script/GameManager.cs" Line="215" Column="9" />
+      <File FileName="Assets/Script/GameManager.cs" Line="201" Column="1" />
       <File FileName="Assets/Script/Note.cs" Line="22" Column="6" />
       <File FileName="Assets/Script/Arrow.cs" Line="140" Column="35" />
-      <File FileName="Assets/Script/Visitor.cs" Line="47" Column="17" />
+      <File FileName="Assets/Script/Visitor.cs" Line="10" Column="38" />
       <File FileName="Assets/Script/Effect.cs" Line="21" Column="100" />
-      <File FileName="Assets/Script/SaveLoad/GameIstance.cs" Line="59" Column="20" />
+      <File FileName="Assets/Script/SaveLoad/GameIstance.cs" Line="44" Column="9" />
       <File FileName="Assets/Script/SaveLoad.cs" Line="16" Column="84" />
       <File FileName="Assets/Script/SaveLoad/TIleSavable.cs" Line="8" Column="23" />
-      <File FileName="Assets/Script/Tile.cs" Line="111" Column="17" />
+      <File FileName="Assets/Script/Tile.cs" Line="74" Column="201" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/gabriele/Documents/Automatune/Assets/Script/Tile.cs" relfile="Assets/Script/Tile.cs" line="76" column="1" />
+      <Breakpoint file="/Users/gabriele/Documents/Automatune/Assets/Script/GameManager.cs" relfile="Assets/Script/GameManager.cs" line="201" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
