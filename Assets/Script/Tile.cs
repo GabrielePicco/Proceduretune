@@ -13,17 +13,19 @@ public class Tile : MonoBehaviour {
     private int column;
     private delegate void AttenuateIfNeeded();
     private AttenuateIfNeeded AttenuateNotesIfNeeded;
+    private Animator anim;
 
 
     private void Start()
     {
         gameManager = GameObject.Find("GM").GetComponent<GameManager>();
+        anim = GetComponent<Animator>();
     }
 
 
     private void Update()
     {
-        //if(AttenuateNotesIfNeeded != null) AttenuateNotesIfNeeded();
+        if(AttenuateNotesIfNeeded != null) AttenuateNotesIfNeeded();
     }
 
 
@@ -85,8 +87,13 @@ public class Tile : MonoBehaviour {
     private void PlayNotes()
     {
         if (GameManager.gameState == GameManager.GameState.Paused) return;
+        bool animTile = false;
         foreach(Note note in notes){
+            animTile = true;
             PlayNote(note);
+        }
+        if(animTile){
+            anim.Play("PlayNote", -1, 0f);
         }
     }
 
@@ -104,8 +111,14 @@ public class Tile : MonoBehaviour {
         note.audioSource = gameObject.AddComponent<AudioSource>();
         note.audioSource.playOnAwake = false;
         note.audioSource.clip = note.clip;
+        note.audioSource.priority = Random.Range(0, 256);
         notes.Add(note);
         AttenuateNotesIfNeeded += note.OnAttenuateIfNeeded;
+    }
+
+    private void OnDestroy()
+    {
+        DestroyAllNotes();
     }
 
     public void DestroyAllNotes()

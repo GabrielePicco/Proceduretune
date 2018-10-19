@@ -1,23 +1,19 @@
 ﻿<Properties StartupConfiguration="{16C9ABE8-4B5A-16CA-8707-F577FA347FBB}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Tile.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Visitor.cs">
     <Files>
-      <File FileName="Assets/Script/GameManager.cs" Line="378" Column="16" />
-      <File FileName="Assets/Script/Note.cs" Line="8" Column="28" />
-      <File FileName="Assets/Script/Arrow.cs" Line="86" Column="24" />
-      <File FileName="Assets/Script/Visitor.cs" Line="10" Column="38" />
-      <File FileName="Assets/Script/Effect.cs" Line="21" Column="100" />
-      <File FileName="Assets/Script/SaveLoad/GameIstance.cs" Line="53" Column="18" />
-      <File FileName="Assets/Script/SaveLoad.cs" Line="17" Column="22" />
-      <File FileName="Assets/Script/SaveLoad/TIleSavable.cs" Line="8" Column="23" />
-      <File FileName="Assets/Script/Tile.cs" Line="27" Column="6" />
+      <File FileName="Assets/Script/GameManager.cs" Line="106" Column="66" />
+      <File FileName="Assets/Script/SaveLoad.cs" Line="12" Column="41" />
+      <File FileName="Assets/Script/Arrow.cs" Line="31" Column="1" />
+      <File FileName="Assets/Script/Tile.cs" Line="113" Column="22" />
+      <File FileName="Assets/Script/AssetBundleManager.cs" Line="36" Column="71" />
+      <File FileName="Assets/Editor/CreateAssetBundles.cs" Line="14" Column="33" />
+      <File FileName="Assets/Script/Visitor.cs" Line="40" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/gabriele/Documents/Automatune/Assets/Script/Arrow.cs" relfile="Assets/Script/Arrow.cs" line="31" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />

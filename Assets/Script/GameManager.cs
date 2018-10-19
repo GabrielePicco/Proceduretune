@@ -235,6 +235,10 @@ public class GameManager : MonoBehaviour
         ShowVisitorEditor();
         visitors.Add(selectedVisitor.GetComponent<Visitor>());
         newVisitors.Add(selectedVisitor);
+        if (gameState == GameState.Paused)
+        {
+            selectedVisitor.GetComponent<Visitor>().OnStop();
+        }
     }
 
 
@@ -372,19 +376,19 @@ public class GameManager : MonoBehaviour
     #region Note
 
 
-    public void AddNote(int row, int column, String notePath)
+    public void AddNote(int row, int column, String bundle, AudioClip noteClip)
     {
         selectedTile = GetTile(row, column);
-        AddNote(notePath);
+        AddNote(bundle, noteClip);
     }
 
-    public void AddNote(String notePath)
+    public void AddNote(String bundle, AudioClip noteClip)
     {
         scroolDynamic.SetActive(false);
         canvasModal.enabled = false;
         Note newNote = new Note();
-        newNote.notePath = notePath;
-        newNote.clip = Resources.Load<AudioClip>(notePath.Substring(0, notePath.LastIndexOf('.')));
+        newNote.bundle = bundle;
+        newNote.clip = noteClip;
         int idx = selectedTile.getNotesCount();
         if (idx < 9)
         {
@@ -531,36 +535,43 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void ShowDinamicScroll(String folderName)
+    public void ShowDinamicScroll(String bundle)
     {
-        DirectoryInfo dir = new DirectoryInfo(@folderName);
-        FileInfo[] info = dir.GetFiles("*.mp3");
-        foreach(Transform child in scroolDynamicContent.transform){
+        StartCoroutine(ShowDimamicScroolCrt(bundle));
+    }
+
+    IEnumerator ShowDimamicScroolCrt(String bundle)
+    {
+        yield return StartCoroutine(AssetBundleManager.Instance.DownloadAssetBundle(bundle));
+        AssetBundle octaveBundle = AssetBundleManager.Instance.getBundle();
+        String[] notes = octaveBundle.GetAllAssetNames();
+        //DirectoryInfo dir = new DirectoryInfo(@folderName);
+        //FileInfo[] info = dir.GetFiles("*.mp3");
+
+        foreach (Transform child in scroolDynamicContent.transform)
+        {
             Destroy(child.gameObject);
         }
         scroolDynamic.SetActive(true);
-        FileInfo[] notes = ReorderNotes(info);
-        foreach (FileInfo f in notes)
+        notes = ReorderNotes(notes);
+        foreach (String f in notes)
         {
-            String noteName = getFileShortName(f.Name);
+            String noteName = getFileShortName(f);
             GameObject btn = Instantiate(btnPrefab);
             btn.transform.SetParent(scroolDynamicContent.transform);
             btn.GetComponentInChildren<Text>().text = noteName;
-            String resourcePath = f.FullName;
-            String find = "Resources";
-            resourcePath = resourcePath.Substring(resourcePath.IndexOf(find, find.Length) + find.Length + 1);
-            btn.GetComponent<Button>().onClick.AddListener(() => AddNote(resourcePath));
+            AudioClip noteClip = octaveBundle.LoadAsset<AudioClip>(f);
+            btn.GetComponent<Button>().onClick.AddListener(() => AddNote(bundle, noteClip));
         }
         RectTransform contentTransform = scroolDynamicContent.GetComponent<RectTransform>();
-        contentTransform.sizeDelta = new Vector2(contentTransform.sizeDelta.x, btnPrefab.GetComponent<RectTransform>().rect.height * notes.Length + 5 * notes.Length + 5);
+        contentTransform.sizeDelta = new Vector2(contentTransform.sizeDelta.x, btnPrefab.GetComponent<RectTransform>().rect.height * notes.Length + 10 * notes.Length + 5);
     }
 
-
-    private FileInfo[] ReorderNotes(FileInfo[] notes)
+    private String[] ReorderNotes(String[] notes)
     {
         int[] substitution = new int[] { 3, 4, 1, 2, 12, 0, 10, 11, 8, 9, 7, 5, 6};
         if (substitution.Length != notes.Length) return notes;
-        FileInfo[] result = new FileInfo[substitution.Length];
+        String[] result = new String[substitution.Length];
         for (int i = 0; i < substitution.Length; i++){
             result[substitution[i]] = notes[i];
         }

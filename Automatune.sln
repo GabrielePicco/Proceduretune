@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio for Mac
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatune", "Assembly-CSharp.csproj", "{16C9ABE8-4B5A-16CA-8707-F577FA347FBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatune", "Assembly-CSharp-Editor.csproj", "{65782EAD-A7CB-778E-6E3B-403196575191}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{16C9ABE8-4B5A-16CA-8707-F577FA347FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16C9ABE8-4B5A-16CA-8707-F577FA347FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16C9ABE8-4B5A-16CA-8707-F577FA347FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65782EAD-A7CB-778E-6E3B-403196575191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65782EAD-A7CB-778E-6E3B-403196575191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65782EAD-A7CB-778E-6E3B-403196575191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65782EAD-A7CB-778E-6E3B-403196575191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

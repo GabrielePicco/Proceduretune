@@ -1,4 +1,8 @@
-﻿[System.Serializable]
+﻿using System;
+using System.Collections;
+using UnityEngine;
+
+[System.Serializable]
 public class GameIstance
 {
     public string name = "Unknow";
@@ -19,7 +23,7 @@ public class GameIstance
                 TileSavable tileSv = new TileSavable(); 
                 Tile tile = gameManager.GetTile(i, j);
                 foreach(Note note in tile.getNotes()){
-                    tileSv.notes.Add(note.notePath);
+                    tileSv.notes.Add(note.bundle + ";" + note.audioSource.clip.name);
                 }
                 Arrow arrow = tile.getArrow();
                 if (arrow != null) tileSv.arrowDirection = (int)arrow.getDirection();
@@ -52,7 +56,9 @@ public class GameIstance
                     gameManager.AddArrow(i, j, (Arrow.Direction)direction);
                 }
                 foreach (string note in tiles[i, j].notes){
-                    gameManager.AddNote(i, j, note);
+                    String[] unpack = note.Split(';');
+                    gameManager.StartCoroutine(AddNoteCrt(gameManager, unpack[0], unpack[1], i, j));
+
                 }
                 if (tiles[i, j].visitorDirection != -1)
                 {
@@ -60,5 +66,13 @@ public class GameIstance
                 }
             }
         }
+    }
+
+    IEnumerator AddNoteCrt(GameManager gameManager, string bundle, string nameNote, int i, int j)
+    {
+        yield return gameManager.StartCoroutine(AssetBundleManager.Instance.DownloadAssetBundle(bundle));
+        AssetBundle octaveBundle = AssetBundleManager.Instance.getBundle();
+        AudioClip noteClip = octaveBundle.LoadAsset<AudioClip>(nameNote);
+        gameManager.AddNote(i, j, bundle, noteClip);
     }
 }
