@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 4208866134
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8b656cf36d9cd379a379749197ae51f4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.Bb3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.B3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.Eb3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.C4.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.G3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.E3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.Gb3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.Ab3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.Db3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.A3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.D3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.F3.mp3
+- Assets/Resources/Sound/Piano/Octave3/Piano.mf.C3.mp3
+Dependencies: []

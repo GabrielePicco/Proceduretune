@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 3646786500
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: f54e1efccd7d3dafde6db22440dccb69
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.Gb4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.B4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.C4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.F4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.Eb4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.C5.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.A4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.Bb4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.Ab4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.D4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.E4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.Db4.mp3
+- Assets/Resources/Sound/Piano/Octave4/Piano.mf.G4.mp3
+Dependencies: []

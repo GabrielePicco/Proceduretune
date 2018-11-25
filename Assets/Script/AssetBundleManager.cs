@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AssetBundleManager : MonoBehaviour
 {
@@ -23,6 +25,19 @@ public class AssetBundleManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
+    private void Start()
+    {
+        string[] initBundleCache = new string[] { "octave1", "octave2", "octave3", "octave4", "octave5", "octave6", "octave7"};
+        foreach(string bundle in initBundleCache){
+            StartCoroutine(DownloadAssetBundle(bundle));
+        }
+    }
+
+    public bool IsInCache(string bundle)
+    {
+        return cachedBundle.ContainsKey(bundle);
+    }
+
     public IEnumerator DownloadAssetBundle(string bundle)
     {
         //WWW www = WWW.LoadFromCacheOrDownload("file:///" + Application.dataPath + "/AssetBundles/octave1.unity3d", 0);
@@ -33,14 +48,32 @@ public class AssetBundleManager : MonoBehaviour
         }
         else
         {
-            WWW www = WWW.LoadFromCacheOrDownload(StreamingAssetPath() + bundle, 0);
-            yield return www;
-            downloadBundle = www.assetBundle;
+            Caching.ClearCache();
+            //WWW www = WWW.LoadFromCacheOrDownload("https://www.dropbox.com/s/ygnfqwjjealjjlj/octave5?dl=1", 0);
+            //yield return www;
+            //downloadBundle = www.assetBundle;
+            if(bundle.Contains("http")){
+                using (var uwr = new UnityWebRequest(bundle, UnityWebRequest.kHttpVerbGET))
+                {
+                    uwr.downloadHandler = new DownloadHandlerAssetBundle(bundle, 0);
+                    yield return uwr.SendWebRequest();
+                    downloadBundle = DownloadHandlerAssetBundle.GetContent(uwr);
+                }
+            }
+            else{
+                downloadBundle = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, bundle));
+            }
             cachedBundle.Add(bundle, downloadBundle);
         }
+        yield return downloadBundle;
     }
 
-    public AssetBundle getBundle()
+    public AssetBundle GetBundle(string bundle)
+    {
+        return cachedBundle.ContainsKey(bundle) ? cachedBundle[bundle] : null;
+    }
+
+    public AssetBundle GetBundle()
     {
         return downloadBundle;
     }

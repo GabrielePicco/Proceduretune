@@ -25,7 +25,7 @@ public class Tile : MonoBehaviour {
 
     private void Update()
     {
-        if(AttenuateNotesIfNeeded != null) AttenuateNotesIfNeeded();
+        //if(AttenuateNotesIfNeeded != null) AttenuateNotesIfNeeded();
     }
 
 
@@ -101,7 +101,7 @@ public class Tile : MonoBehaviour {
     private void PlayNote(Note note)
     {
         note.audioSource.Stop();
-        note.audioSource.volume = 1;
+        note.audioSource.volume = 0.7f;
         note.audioSource.pitch = GameManager.PITCH;
         note.audioSource.Play();
     }

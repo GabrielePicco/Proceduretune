@@ -71,7 +71,7 @@ public class GameIstance
     IEnumerator AddNoteCrt(GameManager gameManager, string bundle, string nameNote, int i, int j)
     {
         yield return gameManager.StartCoroutine(AssetBundleManager.Instance.DownloadAssetBundle(bundle));
-        AssetBundle octaveBundle = AssetBundleManager.Instance.getBundle();
+        AssetBundle octaveBundle = AssetBundleManager.Instance.GetBundle(bundle);
         AudioClip noteClip = octaveBundle.LoadAsset<AudioClip>(nameNote);
         gameManager.AddNote(i, j, bundle, noteClip);
     }

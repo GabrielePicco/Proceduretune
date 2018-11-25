@@ -389,17 +389,23 @@ public class GameManager : MonoBehaviour
         Note newNote = new Note();
         newNote.bundle = bundle;
         newNote.clip = noteClip;
+        newNote.sprite = AddNoteGraphic();
+        selectedTile.AddNote(newNote);
+    }
+
+    private GameObject AddNoteGraphic()
+    {
+        GameObject noteSprite = null;
         int idx = selectedTile.getNotesCount();
         if (idx < 9)
         {
             Vector3 position = selectedTile.transform.position;
             position.x += (tileSize / 7) * 2 * (idx % 3 - 1);
             position.y -= (tileSize / 7) * 2 * (Mathf.FloorToInt(idx / 3) - 1);
-            GameObject noteSprite = Instantiate(note, position, note.transform.rotation);
+            noteSprite = Instantiate(note, position, note.transform.rotation);
             StartCoroutine(Effect.AnimationSlideFromUp(noteSprite, 0.3f));
-            newNote.sprite = noteSprite;
         }
-        selectedTile.AddNote(newNote);
+        return noteSprite;
     }
 
 
@@ -535,16 +541,24 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void ShowDinamicScroll(String bundle)
+    public void ShowDinamicScroll(String bundleName)
     {
-        StartCoroutine(ShowDimamicScroolCrt(bundle));
+        if(AssetBundleManager.Instance.IsInCache(bundleName)){
+            ShowDinamicScrool(AssetBundleManager.Instance.GetBundle(bundleName), bundleName);
+        }else{
+            StartCoroutine(DownloadAndShowDimamicScroolCrt(bundleName));
+        }
     }
 
-    IEnumerator ShowDimamicScroolCrt(String bundle)
+    IEnumerator DownloadAndShowDimamicScroolCrt(String bundleName)
     {
-        yield return StartCoroutine(AssetBundleManager.Instance.DownloadAssetBundle(bundle));
-        AssetBundle octaveBundle = AssetBundleManager.Instance.getBundle();
-        String[] notes = octaveBundle.GetAllAssetNames();
+        yield return StartCoroutine(AssetBundleManager.Instance.DownloadAssetBundle(bundleName));
+        ShowDinamicScrool(AssetBundleManager.Instance.GetBundle(), bundleName);
+    }
+
+
+    private void ShowDinamicScrool(AssetBundle bundle, String bundleName){
+        String[] notes = bundle.GetAllAssetNames();
         //DirectoryInfo dir = new DirectoryInfo(@folderName);
         //FileInfo[] info = dir.GetFiles("*.mp3");
 
@@ -560,8 +574,8 @@ public class GameManager : MonoBehaviour
             GameObject btn = Instantiate(btnPrefab);
             btn.transform.SetParent(scroolDynamicContent.transform);
             btn.GetComponentInChildren<Text>().text = noteName;
-            AudioClip noteClip = octaveBundle.LoadAsset<AudioClip>(f);
-            btn.GetComponent<Button>().onClick.AddListener(() => AddNote(bundle, noteClip));
+            AudioClip noteClip = bundle.LoadAsset<AudioClip>(f);
+            btn.GetComponent<Button>().onClick.AddListener(() => AddNote(bundleName, noteClip));
         }
         RectTransform contentTransform = scroolDynamicContent.GetComponent<RectTransform>();
         contentTransform.sizeDelta = new Vector2(contentTransform.sizeDelta.x, btnPrefab.GetComponent<RectTransform>().rect.height * notes.Length + 10 * notes.Length + 5);

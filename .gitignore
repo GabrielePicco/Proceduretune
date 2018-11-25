@@ -49,3 +49,13 @@ Assets/AssetStore\.meta
 Assets/Maciek 3\.unity
 
 Library/
+
+*.xml
+
+*.meta
+
+*.dll
+
+*.cache
+
+*.pdb

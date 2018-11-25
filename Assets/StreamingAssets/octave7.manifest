@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 2228205890
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fae91eb12349985aa3898df8b96d3451
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.A7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.Gb7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.Bb7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.C7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.Ab7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.G7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.B7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.F7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.Eb7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.Db7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.D7.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.C8.mp3
+- Assets/Resources/Sound/Piano/Octave7/Piano.mf.E7.mp3
+Dependencies: []

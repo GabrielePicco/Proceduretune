@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 597151706
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 77f9b437b1eb3f438dcd19bd63fc81a5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.Bb6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.C6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.A6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.E6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.Db6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.Eb6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.G6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.B6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.Ab6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.C7.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.Gb6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.F6.mp3
+- Assets/Resources/Sound/Piano/Octave6/Piano.mf.D6.mp3
+Dependencies: []

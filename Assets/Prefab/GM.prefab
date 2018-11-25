@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6441546117527086256}
-  - component: {fileID: 6441546117527086257}
+  - component: {fileID: 1409567014}
   m_Layer: 0
   m_Name: GM
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6441546117527086257
+--- !u!114 &1409567014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b784db7ff896f460eb4f64d4f033e26f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile: {fileID: 6861224672357590329, guid: 4bfd06889c47348c5be8f87d8653578f, type: 3}
-  visitor: {fileID: 907197121608850458, guid: 7015723ab451349b3a6f704575b6c27e, type: 3}
   tilesNumber: 7
   spanPercentual: 15
+  tile: {fileID: 6861224672357590329, guid: 4bfd06889c47348c5be8f87d8653578f, type: 3}
+  visitor: {fileID: 907197121608850458, guid: 7015723ab451349b3a6f704575b6c27e, type: 3}
+  arrow: {fileID: 894026636079850810, guid: 8438a2c417d8543a7aafc7b2b51c1867, type: 3}
+  note: {fileID: 907197121608850458, guid: 59a8a1b0efb4846788ad470afe88924b, type: 3}
+  btnPrefab: {fileID: 6532993584704473064, guid: 638c032e9a60348f0bed1cb11e6a2da2,
+    type: 3}
+  scroolDynamic: {fileID: 0}
+  scroolOctave: {fileID: 0}
+  scroolDynamicContent: {fileID: 0}
+  defaultPanel: {fileID: 0}
+  canvasModal: {fileID: 0}
+  canvasNewGame: {fileID: 0}
+  sliderVelocity: {fileID: 0}
+  sliderPitch: {fileID: 0}
+  sliderTilesNumbers: {fileID: 0}
+  txtTilesNumber: {fileID: 0}
+  btnNormalColor: {r: 0.3019608, g: 0.3019608, b: 0.3019608, a: 1}
+  btnSelectedColor: {r: 0.74509805, g: 0.1882353, b: 0.1882353, a: 1}
+  btnPlay: {fileID: 0}
+  btnPause: {fileID: 0}
+  btnAddArrow: {fileID: 0}
+  btnModifyArrow: {fileID: 0}
+  btnDeleteAllNotes: {fileID: 0}
+  btnArrowRotate: {fileID: 0}
+  btnArrowDelete: {fileID: 0}
+  btnVisitorDelete: {fileID: 0}

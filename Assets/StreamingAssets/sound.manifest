@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 2303874157
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a9a7847eb246519d9e44061386d73e43
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Sound/Effects/Cowboy with spurs.mp3
+- Assets/Resources/Sound/Effects/MP5.mp3
+- Assets/Resources/Sound/Effects/Pew Pew.mp3
+- Assets/Resources/Sound/Effects/Kid Laughing.mp3
+- Assets/Resources/Sound/Effects/Burp.mp3
+- Assets/Resources/Sound/Effects/Train.mp3
+- Assets/Resources/Sound/Effects/Ufo Landing.mp3
+- Assets/Resources/Sound/Effects/Punch.mp3
+- Assets/Resources/Sound/Effects/Crow Call.mp3
+- Assets/Resources/Sound/Effects/DJ Scratching.mp3
+Dependencies: []

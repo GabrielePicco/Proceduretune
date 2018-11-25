@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 4052286121
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d60bd675f7f833294439e90877879415
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.A5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.G5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.E5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.Ab5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.D5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.Db5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.B5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.Gb5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.Bb5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.F5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.Eb5.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.C6.mp3
+- Assets/Resources/Sound/Piano/Octave5/Piano.mf.C5.mp3
+Dependencies: []

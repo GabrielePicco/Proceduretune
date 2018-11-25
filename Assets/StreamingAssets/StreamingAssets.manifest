@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 3975613123
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: octave1
+      Dependencies: {}
+    Info_1:
+      Name: octave2
+      Dependencies: {}
+    Info_2:
+      Name: octave3
+      Dependencies: {}
+    Info_3:
+      Name: octave4
+      Dependencies: {}
+    Info_4:
+      Name: octave5
+      Dependencies: {}
+    Info_5:
+      Name: octave6
+      Dependencies: {}
+    Info_6:
+      Name: octave7
+      Dependencies: {}
+    Info_7:
+      Name: sound
+      Dependencies: {}
