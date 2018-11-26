@@ -65,7 +65,7 @@ public class AssetBundleManager : MonoBehaviour
             }
             cachedBundle.Add(bundle, downloadBundle);
         }
-        yield return downloadBundle;
+        yield return null;
     }
 
     public AssetBundle GetBundle(string bundle)
