@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -37,6 +36,7 @@ public class GameManager : MonoBehaviour
     public GameObject defaultPanel;
     public Canvas canvasModal;
     public Canvas canvasNewGame;
+    public Canvas canvasSaveAudioFile;
     public Slider sliderVelocity;
     public Slider sliderPitch;
     public Slider sliderTilesNumbers;
@@ -494,7 +494,7 @@ public class GameManager : MonoBehaviour
 
     public void ShowOptionMenu(Tile tile)
     {
-        if (canvasModal.enabled == false && canvasNewGame.enabled == false)
+        if (canvasModal.enabled == false && canvasNewGame.enabled == false && canvasSaveAudioFile.enabled == false)
         {
             canvasModal.enabled = true;
             if (tile.GetComponentInChildren<Arrow>() != null)

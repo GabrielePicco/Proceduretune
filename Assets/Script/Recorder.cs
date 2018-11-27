@@ -13,6 +13,9 @@ public class Recorder : MonoBehaviour {
     private Boolean recOutput = false;
     private FileStream fileStream;
 
+    public Canvas canvasSaveAudioFile;
+    public Text txtAudioFileName;
+
     [Header("Record Button")]
     public Color btnNormalColor = new Color32(77, 77, 77, 255);
     public Color btnSelectedColor = new Color32(190, 48, 48, 255);
@@ -37,9 +40,19 @@ public class Recorder : MonoBehaviour {
             recOutput = true;
             btnRecord.GetComponent<Image>().color = btnSelectedColor;
         }else{
+            canvasSaveAudioFile.enabled = true;
             recOutput = false;
-            WriteAudioFile();
             btnRecord.GetComponent<Image>().color = btnNormalColor;
+            WriteHeader();
+        }
+    }
+
+    public void SaveAudioFile()
+    {
+        string fileName = txtAudioFileName.text;
+        if(fileName.Trim().Equals("") == false){
+            RenameFile(fileName.Trim() + ".wav");
+            canvasSaveAudioFile.enabled = false;
         }
     }
 
@@ -79,7 +92,7 @@ public class Recorder : MonoBehaviour {
         fileStream.Write(bytesData, 0, bytesData.Length);
     }
 
-    public void WriteAudioFile()
+    private void WriteHeader()
     {
         fileStream.Seek(0, SeekOrigin.Begin);
 
@@ -120,10 +133,15 @@ public class Recorder : MonoBehaviour {
         fileStream.Write(subChunk2, 0, 4);
 
         fileStream.Close();
-        String file_path = Path.Combine(Application.persistentDataPath, "recorder_test.wav");
-        if(File.Exists(file_path)){
+    }
+
+    private void RenameFile(String newName){
+        String file_path = Path.Combine(Application.persistentDataPath, newName);
+        if (File.Exists(file_path))
+        {
             File.Delete(file_path);
         }
+        Debug.Log(Path.Combine(Application.persistentDataPath, fileName));
         File.Move(Path.Combine(Application.persistentDataPath, fileName), file_path);
     }
 }
