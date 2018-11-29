@@ -3,12 +3,13 @@ using System;
 using System.IO;
 using UnityEngine.UI;
 
-public class Recorder : MonoBehaviour {
+public class Recorder : MonoBehaviour
+{
 
     private int bufferSize;
     private int numBuffers;
     private int outputRate = 44100;
-    private String fileName = "recTest.wav";
+    private String fileName = "recorded_temp.wav";
     private int headerSize = 44; //default for uncompressed wav
     private Boolean recOutput = false;
     private FileStream fileStream;
@@ -29,7 +30,7 @@ public class Recorder : MonoBehaviour {
 
     private void Start()
     {
-        AudioSettings.GetDSPBufferSize(out bufferSize,out numBuffers);
+        AudioSettings.GetDSPBufferSize(out bufferSize, out numBuffers);
     }
 
     public void StartStopRecording()
@@ -39,7 +40,9 @@ public class Recorder : MonoBehaviour {
             StartWriting(fileName);
             recOutput = true;
             btnRecord.GetComponent<Image>().color = btnSelectedColor;
-        }else{
+        }
+        else
+        {
             canvasSaveAudioFile.enabled = true;
             recOutput = false;
             btnRecord.GetComponent<Image>().color = btnNormalColor;
@@ -50,7 +53,8 @@ public class Recorder : MonoBehaviour {
     public void SaveAudioFile()
     {
         string fileName = txtAudioFileName.text;
-        if(fileName.Trim().Equals("") == false){
+        if (fileName.Trim().Equals("") == false)
+        {
             RenameFile(fileName.Trim() + ".wav");
             canvasSaveAudioFile.enabled = false;
         }
@@ -67,7 +71,7 @@ public class Recorder : MonoBehaviour {
         }
     }
 
-    private void OnAudioFilterRead(float[] data,int channels)
+    private void OnAudioFilterRead(float[] data, int channels)
     {
         if (recOutput)
         {
@@ -135,13 +139,31 @@ public class Recorder : MonoBehaviour {
         fileStream.Close();
     }
 
-    private void RenameFile(String newName){
-        String file_path = Path.Combine(Application.persistentDataPath, newName);
-        if (File.Exists(file_path))
+    private void RenameFile(String newName)
+    {
+        String filePath = Path.Combine(GetFileDestinationFolder(), newName);
+        if (File.Exists(filePath))
         {
-            File.Delete(file_path);
+            File.Delete(filePath);
         }
-        Debug.Log(Path.Combine(Application.persistentDataPath, fileName));
-        File.Move(Path.Combine(Application.persistentDataPath, fileName), file_path);
+        Debug.Log(filePath);
+        File.Move(Path.Combine(Application.persistentDataPath, fileName), filePath);
+#if UNITY_IPHONE || UNITY_ANDROID
+        new NativeShare().AddFile(filePath).SetSubject(newName + " (Created with Automatune)").SetText(newName).Share();
+#endif
+    }
+
+    private string GetFileDestinationFolder()
+    {
+#if UNITY_IPHONE || UNITY_ANDROID
+        return Application.persistentDataPath;
+#else
+        string musicFolder= Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        string path = Path.Combine(musicFolder, "Automatune");
+        if (!Directory.Exists(path)){
+           Directory.CreateDirectory(path);
+        }
+        return path;
+#endif
     }
 }
