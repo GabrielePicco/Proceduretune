@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     public GameObject btnAddArrow;
     public GameObject btnModifyArrow;
     public GameObject btnDeleteAllNotes;
+    private string btnDeleteAllNotesText;
 
     [Header("EditorButton")]
     public GameObject btnArrowRotate;
@@ -90,6 +91,7 @@ public class GameManager : MonoBehaviour
         HideAllEditor();
         AddVisitor();
         StartCoroutine(onClockEvent());
+        btnDeleteAllNotesText = btnDeleteAllNotes.GetComponentInChildren<Text>().text + " ";
     }
 
 
@@ -508,6 +510,7 @@ public class GameManager : MonoBehaviour
                 btnAddArrow.SetActive(true);
             }
             btnDeleteAllNotes.SetActive(tile.getNotesCount() > 0);
+            btnDeleteAllNotes.GetComponentInChildren<Text>().text = btnDeleteAllNotesText + tile.getNotesNames();
             this.selectedTile.GetComponent<SpriteRenderer>().color = btnNormalColor;
             if (selectedVisitor != null)
             {

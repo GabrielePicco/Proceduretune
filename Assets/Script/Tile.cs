@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum TileType { None, Border, Margin, Corner };
@@ -163,6 +164,11 @@ public class Tile : MonoBehaviour {
     public List<Note> getNotes()
     {
         return notes;
+    }
+
+    public string getNotesNames()
+    {
+        return "(" + string.Join(",", notes.Select(x => x.ToString()).ToArray()) + ")";
     }
 
     public int getNotesCount(){

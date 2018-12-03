@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class Note
 {
@@ -20,4 +21,10 @@ public class Note
             audioSource.volume = audioSource.volume - speedOfSoundAttenuation * Time.deltaTime;
         }
     }
+
+    public override string ToString()
+    {
+        return clip.name.Split('.').Last();
+    }
+
 }

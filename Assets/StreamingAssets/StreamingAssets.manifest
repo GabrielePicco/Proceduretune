@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3975613123
+CRC: 1543798280
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -22,7 +22,4 @@ AssetBundleManifest:
       Dependencies: {}
     Info_6:
       Name: octave7
-      Dependencies: {}
-    Info_7:
-      Name: sound
       Dependencies: {}

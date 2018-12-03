@@ -78,17 +78,4 @@ public class AssetBundleManager : MonoBehaviour
         return downloadBundle;
     }
 
-
-    public static String StreamingAssetPath()
-    {
-        String path = "";
-#if UNITY_ANDROID
-        path = "jar:file://" + Application.dataPath + "!/assets/";
-#elif UNITY_IOS
-        path Application.dataPath + "/Raw/";
-#else
-        path = Application.dataPath + "/StreamingAssets/";
-#endif
-        return path;
-    }
 }
