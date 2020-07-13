@@ -1,4 +1,4 @@
-# Automatune
+# Proceduretune
 
 ![alt text](https://i.imgur.com/6LOsstr.png)
 
